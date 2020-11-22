@@ -83,7 +83,7 @@ namespace DiscordBot2
             this.Commands.RegisterCommands<RussianRouletteCommands>();
 
             // set up our custom help formatter
-            this.Commands.SetHelpFormatter<SimpleHelpFormatter>();
+            //this.Commands.SetHelpFormatter<SimpleHelpFormatter>();
 
             // enable voice
             this.Voice = this.Client.UseVoiceNext();

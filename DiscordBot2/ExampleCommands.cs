@@ -167,7 +167,7 @@ namespace DiscordBot2
         [Command("play")]
         [Description("Plays an audio file")]
         [Aliases("p")]
-        public async Task Play(CommandContext ctx, [Description("Name")] string name)
+        public async Task Play(CommandContext ctx, [Description("Name: Alphabet Eat Horny Munching Penetrate Pretty Showing Yabba")] string name)
         {
             await Join(ctx);
 
@@ -185,6 +185,8 @@ namespace DiscordBot2
                 return;
             }
 
+            name = name.ToLower();
+
             string filename;
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
@@ -192,7 +194,7 @@ namespace DiscordBot2
             }
             else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
-                filename = "recordings/" + name + ".mp3";
+                filename = "./recordings/" + name + ".mp3";
             }
             else
             {
