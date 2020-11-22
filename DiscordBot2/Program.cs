@@ -13,6 +13,24 @@ using Newtonsoft.Json;
 
 namespace DiscordBot2
 {
+    public static class Config
+    {
+        public static ConfigJson cfgjson;
+
+        public static async Task load()
+        {
+            // first, let's load our configuration file
+            var json = "";
+            using (var fs = File.OpenRead("config.json"))
+            using (var sr = new StreamReader(fs, new UTF8Encoding(false)))
+                json = await sr.ReadToEndAsync();
+
+            // next, let's load the values from that file
+            // to our client's configuration
+            cfgjson = JsonConvert.DeserializeObject<ConfigJson>(json);
+        }
+    }
+
     public class Program
     {
         public readonly EventId BotEventId = new EventId(42, "Bot-Ex01");
@@ -28,18 +46,10 @@ namespace DiscordBot2
         }
         public async Task MainAsync(string[] args)
         {
-            // first, let's load our configuration file
-            var json = "";
-            using (var fs = File.OpenRead("config.json"))
-            using (var sr = new StreamReader(fs, new UTF8Encoding(false)))
-                json = await sr.ReadToEndAsync();
-
-            // next, let's load the values from that file
-            // to our client's configuration
-            var cfgjson = JsonConvert.DeserializeObject<ConfigJson>(json);
+            await Config.load();
             var cfg = new DiscordConfiguration
             {
-                Token = cfgjson.Token,
+                Token = Config.cfgjson.Token,
                 TokenType = TokenType.Bot,
 
                 AutoReconnect = true,
@@ -59,7 +69,7 @@ namespace DiscordBot2
             var ccfg = new CommandsNextConfiguration
             {
                 // let's use the string prefix defined in config.json
-                StringPrefixes = new[] { cfgjson.CommandPrefix },
+                StringPrefixes = new[] { Config.cfgjson.CommandPrefix },
 
                 // enable responding in direct messages
                 EnableDms = false,
@@ -175,5 +185,8 @@ namespace DiscordBot2
 
         [JsonProperty("prefix")]
         public string CommandPrefix { get; private set; }
+
+        [JsonProperty("recordings_desc")]
+        public string RecordingsDesc { get; private set; }
     }
 }

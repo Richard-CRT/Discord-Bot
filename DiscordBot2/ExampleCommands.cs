@@ -133,6 +133,13 @@ namespace DiscordBot2
             vnc.Disconnect();
         }
 
+        [Command("recordings")]
+        [Description("Print list of recordings")]
+        public async Task Recordings(CommandContext ctx)
+        {
+            await ctx.TriggerTypingAsync();
+            await ctx.RespondAsync($"```{Config.cfgjson.RecordingsDesc}```");
+        }
 
         public float VolumeLevel = 1;
         [Command("volume")]
@@ -167,7 +174,7 @@ namespace DiscordBot2
         [Command("play")]
         [Description("Plays an audio file")]
         [Aliases("p")]
-        public async Task Play(CommandContext ctx, [Description("Name: Alphabet Eat Horny Munching Penetrate Pretty Showing Yabba")] string name)
+        public async Task Play(CommandContext ctx, [Description("Name of the recording to play")] string name)
         {
             await Join(ctx);
 
