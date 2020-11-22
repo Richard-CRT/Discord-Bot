@@ -167,7 +167,7 @@ namespace DiscordBot2
         [Command("play")]
         [Description("Plays an audio file")]
         [Aliases("p")]
-        public async Task Play(CommandContext ctx)
+        public async Task Play(CommandContext ctx, [Description("Name")] string name)
         {
             await Join(ctx);
 
@@ -185,7 +185,19 @@ namespace DiscordBot2
                 return;
             }
 
-            string filename = "Penetrate.mp3";
+            string filename;
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                filename = "recordings\\" + name + ".mp3";
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                filename = "recordings/" + name + ".mp3";
+            }
+            else
+            {
+                return;
+            }
 
             // check if file exists
             if (!File.Exists(filename))
@@ -206,9 +218,8 @@ namespace DiscordBot2
             {
                 // play
                 //await ctx.Message.RespondAsync($"Playing `{filename}`");
-
+                Console.WriteLine($@"-i ""{filename}"" -ac 2 -f s16le -ar 48000 pipe:1 -loglevel quiet");
                 await vnc.SendSpeakingAsync(true);
-                Console.WriteLine($@"-c ""ffmpeg -i {filename} -ac 2 -f s16le -ar 48000 pipe:1 -loglevel quiet""");
                 ProcessStartInfo psi;
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 {
